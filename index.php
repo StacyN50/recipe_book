@@ -1,5 +1,4 @@
 <?php include("config/db.php"); ?>
-<?php include("config/env.php"); ?>
 
 <?php include("includes/header.php"); ?>
 
@@ -15,18 +14,11 @@
 <div class="recipes-grid">
 
 <?php
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$recipes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$where = "";
-
-if(isset($_GET['search'])){
-    $search = $_GET['search'];
-    $where = "WHERE title LIKE '%$search%'";
-}
-
-$sql = "SELECT * FROM recipes $where ORDER BY id DESC";
-$result = $conn->query($sql);
-
-while($row = $result->fetch_assoc()):
+foreach ($recipes as $row):
 ?>
 
 <div class="recipe-card">
@@ -35,7 +27,6 @@ while($row = $result->fetch_assoc()):
 
     <div class="recipe-content">
         <h3><?php echo $row['title']; ?></h3>
-
         <p><?php echo $row['category']; ?></p>
 
         <a href="recipe.php?id=<?php echo $row['id']; ?>">
@@ -45,7 +36,7 @@ while($row = $result->fetch_assoc()):
 
 </div>
 
-<?php endwhile; ?>
+<?php endforeach; ?>
 
 </div>
 
