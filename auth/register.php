@@ -2,106 +2,83 @@
 session_start();
 include("../config/db.php");
 
-/*
-========================================
-REGISTER USER
-========================================
-*/
-
 $message = "";
 
-if(isset($_POST['register'])){
+if (isset($_POST['register'])) {
 
     // CLEAN INPUTS
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    /*
-    ========================================
-    VALIDATION
-    ========================================
-    */
-
-    if(empty($name) || empty($email) || empty($password)){
+    // VALIDATION
+    if (empty($name) || empty($email) || empty($password)) {
 
         $message = "<div class='error'>All fields are required.</div>";
 
-    }else{
+    } else {
 
-        /*
-        ========================================
-        CHECK IF EMAIL EXISTS
-        ========================================
-        */
-
-        $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
-        $check->bind_param("s", $email);
-        $check->execute();
-        $check->store_result();
-
-        if($check->num_rows > 0){
-
-            $message = "<div class='error'>Email already exists.</div>";
-
-        }else{
+        try {
 
             /*
             ========================================
-            HASH PASSWORD
+            CHECK IF EMAIL EXISTS (PDO VERSION)
             ========================================
             */
 
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $check = $conn->prepare("SELECT id FROM users WHERE email = :email");
+            $check->execute([
+                ":email" => $email
+            ]);
 
-            /*
-            ========================================
-            INSERT USER
-            ========================================
-            */
+            if ($check->fetch()) {
 
-            $stmt = $conn->prepare("
-                INSERT INTO users(name, email, password)
-                VALUES(?, ?, ?)
-            ");
+                $message = "<div class='error'>Email already exists.</div>";
 
-            if($stmt){
+            } else {
 
-                $stmt->bind_param(
-                    "sss",
-                    $name,
-                    $email,
-                    $hashed_password
-                );
+                /*
+                ========================================
+                HASH PASSWORD
+                ========================================
+                */
 
-                if($stmt->execute()){
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $_SESSION['success'] =
-                    "Registration successful. Please login.";
+                /*
+                ========================================
+                INSERT USER (PDO)
+                ========================================
+                */
+
+                $stmt = $conn->prepare("
+                    INSERT INTO users(name, email, password)
+                    VALUES(:name, :email, :password)
+                ");
+
+                $result = $stmt->execute([
+                    ":name" => $name,
+                    ":email" => $email,
+                    ":password" => $hashed_password
+                ]);
+
+                if ($result) {
+
+                    $_SESSION['success'] = "Registration successful. Please login.";
 
                     header("Location: login.php");
                     exit();
 
-                }else{
+                } else {
 
-                    $message =
-                    "<div class='error'>
-                        Registration failed.
-                    </div>";
+                    $message = "<div class='error'>Registration failed.</div>";
                 }
-
-                $stmt->close();
-
-            }else{
-
-                $message =
-                "<div class='error'>
-                    Database error: ".$conn->error."
-                </div>";
             }
-        }
 
-        $check->close();
+        } catch (PDOException $e) {
+
+            $message = "<div class='error'>Database error: " . $e->getMessage() . "</div>";
+        }
     }
 }
 ?>
@@ -109,17 +86,10 @@ if(isset($_POST['register'])){
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-
-    <link rel="stylesheet"
-          href="../assets/css/style.css">
-
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
@@ -130,36 +100,15 @@ if(isset($_POST['register'])){
 
         <h2>Create Account</h2>
 
-        <!-- DISPLAY MESSAGE -->
         <?php echo $message; ?>
 
-        <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            required
-        >
+        <input type="text" name="name" placeholder="Full Name" required>
 
-        <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            required
-        >
+        <input type="email" name="email" placeholder="Email Address" required>
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-        >
+        <input type="password" name="password" placeholder="Password" required>
 
-        <button
-            type="submit"
-            name="register"
-        >
-            Register
-        </button>
+        <button type="submit" name="register">Register</button>
 
         <p>
             Already have an account?
