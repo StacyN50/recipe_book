@@ -1,4 +1,14 @@
-<?php include("config/db.php"); ?>
+<?php
+$config = require __DIR__ . "/env.php";
+
+$conn = new mysqli(
+    $config["host"],
+    $config["user"],
+    $config["pass"],
+    $config["name"],
+    $config["port"]
+);
+?>
 <?php include("config/env.php"); ?>
 <?php include("includes/header.php"); ?>
 
