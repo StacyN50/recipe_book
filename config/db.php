@@ -1,11 +1,16 @@
 <?php
+
 $config = require __DIR__ . "/env.php";
 
-$conn = new mysqli(
-    $config["host"],
-    $config["user"],
-    $config["pass"],
-    $config["name"],
-    $config["port"]
-);
-?>
+try {
+    $conn = new PDO(
+        "pgsql:host={$config['host']};port={$config['port']};dbname={$config['name']}",
+        $config['user'],
+        $config['pass']
+    );
+
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+} catch (PDOException $e) {
+    die("DB Connection failed: " . $e->getMessage());
+}
