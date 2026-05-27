@@ -1,22 +1,8 @@
 <?php
-
-$config = require __DIR__ . "/env.php";
-
-// Validate env variables first
-foreach ($config as $key => $value) {
-    if ($value === null || $value === "") {
-        die("Missing environment variable for: $key");
-    }
-}
-
-$conn = new mysqli(
-    $config["host"],
-    $config["user"],
-    $config["pass"],
-    $config["name"],
-    $config["port"]
-);
-
-if ($conn->connect_error) {
-    die("DB Connection failed: " . $conn->connect_error);
-}
+return [
+  "host" => getenv("DB_HOST"),
+  "user" => getenv("DB_USER"),
+  "pass" => getenv("DB_PASS"),
+  "name" => getenv("DB_NAME"),
+  "port" => getenv("DB_PORT") ?: 3306,
+];
