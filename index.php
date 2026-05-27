@@ -1,4 +1,6 @@
 <?php include("config/db.php"); ?>
+<?php include("config/env.php"); ?>
+
 <?php include("includes/header.php"); ?>
 
 <div class="hero">
