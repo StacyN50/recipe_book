@@ -17,25 +17,8 @@ CREATE CONNECTION
 ========================================
 */
 
-$conn = mysqli_connect(
-    $host,
-    $username,
-    $password,
-    $database
-);
+$conn = new mysqli($host, $user, $pass, $db);
 
-/*
-========================================
-CHECK CONNECTION
-========================================
-*/
-
-if(!$conn){
-
-    die(
-        "Database Connection Failed: "
-        . mysqli_connect_error()
-    );
+if ($conn->connect_error) {
+    die("DB Connection failed");
 }
-
-?>
