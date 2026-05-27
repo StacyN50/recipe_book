@@ -107,3 +107,24 @@ Recipe categories filter
 Dark mode
 REST API version
 Mobile app
+
+<svg width="1200" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1">
+      <stop offset="0%" stop-color="#ff7e5f"/>
+      <stop offset="100%" stop-color="#feb47b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="400" fill="url(#bg)"/>
+
+  <text x="50%" y="45%" text-anchor="middle"
+        font-size="70" fill="white" font-family="Arial">
+    FlavorVault
+  </text>
+
+  <text x="50%" y="60%" text-anchor="middle"
+        font-size="25" fill="white">
+    Discover • Create • Share Recipes
+  </text>
+</svg>
