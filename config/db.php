@@ -6,10 +6,10 @@ DATABASE CONFIGURATION
 ========================================
 */
 
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "recipe_book";
+$host = get_env("localhost");
+$username = get_env("root");
+$password = get_env("");
+$database = get_env("recipe_book");
 
 /*
 ========================================
