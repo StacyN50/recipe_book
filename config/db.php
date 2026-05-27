@@ -6,7 +6,7 @@ DATABASE CONFIGURATION
 ========================================
 */
 
-$host = get_env("localhost");
+$host = get_env("127.0.0.1");
 $username = get_env("root");
 $password = get_env("");
 $database = get_env("recipe_book");
