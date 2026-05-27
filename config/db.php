@@ -6,10 +6,10 @@ DATABASE CONFIGURATION
 ========================================
 */
 
-$host = "dpg-d8bc526gvqtc73afk7fg-a";
-$username = "recipe_book_91m6_user";
-$password = "iE06NhBmqIcVIbAZBgrJvLWmT34UhCb3";
-$database = "recipe_book_91m6";
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "recipe_book";
 
 /*
 ========================================
