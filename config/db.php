@@ -1,3 +1,4 @@
+<?php
 $config = require __DIR__ . "/env.php";
 
 $conn = new mysqli(
@@ -7,3 +8,4 @@ $conn = new mysqli(
     $config["name"],
     $config["port"]
 );
+?>
